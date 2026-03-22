@@ -11,9 +11,9 @@
 
 <body>
 
-  <div class="hero-section" style="cursor: pointer; position: relative; width: 100%; max-width: 1050px; margin: 2rem auto 1rem auto; padding: 2rem; box-sizing: border-box; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.2s; overflow: hidden;" onclick="window.location.href='guide.html'" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+  <div class="hero-section" style="position: relative; width: 100%; max-width: 1050px; margin: 2rem auto 1rem auto; padding: 2rem; box-sizing: border-box; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden;">
     
-    <div id="slideContent" style="display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; transition: opacity 0.5s ease-in-out; opacity: 1;">
+    <div id="slideContent" style="display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; opacity: 1;">
       
       <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
         <img id="slideImg" src="images/diamond9_hero.png" alt="Hero representation" style="width: 100%; max-width: 400px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
@@ -35,9 +35,10 @@
         <div class="tags-container" id="slideTags" style="margin-top: 15px;"></div>
 
         <div style="margin-top: 25px;">
-          <span style="display: inline-block; background-color: #e73c7e; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 6px rgba(231, 60, 126, 0.25);">
+          <!-- Make THIS exactly specifically the button -->
+          <button onclick="window.location.href='guide.html'" class="presetBtn" style="background-color: #e73c7e; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(231, 60, 126, 0.25);">
             View Thinking Tools Guide
-          </span>
+          </button>
         </div>
       </div>
 
@@ -54,7 +55,6 @@
       { id: 'elimination', title: 'Elimination Mode', desc: 'Argumentative, debate-driven head-to-head evaluation.', image: 'images/elim_hero.png', speed: 80, depth: 80, discussion: 100, complexity: 60, tags: ['Debate-driven', 'Tournament'] }
     ];
     let b_currentIndex = 0;
-    let autoCycleInterval;
     let isUserDragging = false;
     
     document.addEventListener("DOMContentLoaded", function() {
@@ -70,115 +70,56 @@
       const sliderComp = document.getElementById('sliderComp');
       const sliders = [sliderSpeed, sliderDepth, sliderDisc, sliderComp];
 
-      // Prevent clicks and touch on sliders from navigating to guide.html
-      const slidersContainer = document.getElementById('slidersContainer');
-      slidersContainer.addEventListener('click', e => e.stopPropagation());
-      slidersContainer.addEventListener('mousedown', e => e.stopPropagation());
-      slidersContainer.addEventListener('touchstart', e => e.stopPropagation());
-
       function updateSliderVisual(slider, val) {
         slider.style.background = `linear-gradient(90deg, #e73c7e 0%, #ff8a00 ${val}%, #edf2f7 ${val}%, #edf2f7 100%)`;
       }
 
-      function updateUIElements(data, instant = false) {
-        // Sync Dropdown
+      function updateUIElements(data) {
         const layoutSelectElem = document.getElementById('layoutSelect');
         if (layoutSelectElem && layoutSelectElem.value !== data.id) {
             layoutSelectElem.value = data.id;
             if (typeof updateActiveInputs === 'function') updateActiveInputs();
         }
 
-        if (instant) {
-          b_content.style.transition = 'none';
-          b_content.style.opacity = 1;
-          b_img.src = data.image;
-          b_title.textContent = data.title;
-          b_desc.textContent = data.desc;
-          
-          b_tags.innerHTML = '';
-          data.tags.forEach(t => {
-            const span = document.createElement('span');
-            span.className = 'tag';
-            span.textContent = t;
-            b_tags.appendChild(span);
-          });
-          
-          setTimeout(() => {
-            b_content.style.transition = 'opacity 1s ease-in-out';
-          }, 50);
-        } else {
-          b_content.style.transition = 'opacity 1s ease-in-out';
-          b_content.style.opacity = 0;
-          
-          setTimeout(() => {
-            b_img.src = data.image;
-            b_title.textContent = data.title;
-            b_desc.textContent = data.desc;
-            
-            b_tags.innerHTML = '';
-            data.tags.forEach(t => {
-              const span = document.createElement('span');
-              span.className = 'tag';
-              span.textContent = t;
-              b_tags.appendChild(span);
-            });
-
-            b_content.style.opacity = 1;
-          }, 1000); 
-        }
+        b_img.src = data.image;
+        b_title.textContent = data.title;
+        b_desc.textContent = data.desc;
+        
+        b_tags.innerHTML = '';
+        data.tags.forEach(t => {
+          const span = document.createElement('span');
+          span.className = 'tag';
+          span.textContent = t;
+          b_tags.appendChild(span);
+        });
       }
 
-      function renderSlide(index, animateSliders = true, instant = false) {
+      function renderSlide(index, animateSliders = true) {
         const data = b_carouselData[index];
         b_currentIndex = index;
         
-        updateUIElements(data, instant);
+        updateUIElements(data);
 
         if (animateSliders) {
-            setTimeout(() => {
-                if(!isUserDragging) {
-                    sliderSpeed.value = data.speed;
-                    updateSliderVisual(sliderSpeed, data.speed);
-                    sliderDepth.value = data.depth;
-                    updateSliderVisual(sliderDepth, data.depth);
-                    sliderDisc.value = data.discussion;
-                    updateSliderVisual(sliderDisc, data.discussion);
-                    sliderComp.value = data.complexity;
-                    updateSliderVisual(sliderComp, data.complexity);
-                }
-            }, instant ? 10 : 1000);
+            if(!isUserDragging) {
+                sliderSpeed.value = data.speed;
+                updateSliderVisual(sliderSpeed, data.speed);
+                sliderDepth.value = data.depth;
+                updateSliderVisual(sliderDepth, data.depth);
+                sliderDisc.value = data.discussion;
+                updateSliderVisual(sliderDisc, data.discussion);
+                sliderComp.value = data.complexity;
+                updateSliderVisual(sliderComp, data.complexity);
+            }
         }
       }
 
-      setTimeout(() => renderSlide(0), 100);
-
-      function stopAutoCycle() {
-          if (autoCycleInterval) {
-              clearInterval(autoCycleInterval);
-              autoCycleInterval = null;
-          }
-      }
-
-      function startAutoCycle() {
-        if(autoCycleInterval) clearInterval(autoCycleInterval);
-        autoCycleInterval = setInterval(() => {
-          if (!isUserDragging) {
-              const nextIndex = (b_currentIndex + 1) % b_carouselData.length;
-              renderSlide(nextIndex);
-          }
-        }, 20000);
-      }
-      startAutoCycle();
-
-      // Stop auto-cycle completely if user touches anything on the page
-      ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
-          document.addEventListener(evt, stopAutoCycle, { once: true, passive: true });
-      });
+      // Initial visual load
+      setTimeout(() => renderSlide(0), 50);
 
       // Interactive logic
       function handleSliderInput(e) {
           isUserDragging = true; 
-          stopAutoCycle(); // Redundant but safe
           
           let slider = e.target;
           updateSliderVisual(slider, slider.value);
@@ -202,7 +143,7 @@
 
           if (closestIdx !== b_currentIndex) {
               b_currentIndex = closestIdx;
-              updateUIElements(b_carouselData[closestIdx], true);
+              updateUIElements(b_carouselData[closestIdx]);
           }
       }
 
@@ -213,14 +154,12 @@
       document.addEventListener('mouseup', () => isUserDragging = false);
       document.addEventListener('touchend', () => isUserDragging = false);
 
-      // Let the picker override the hero element
       const layoutDropdown = document.getElementById('layoutSelect');
       if (layoutDropdown) {
           layoutDropdown.addEventListener('change', (e) => {
-              stopAutoCycle();
               const idx = b_carouselData.findIndex(t => t.id === e.target.value);
               if (idx !== -1 && idx !== b_currentIndex) {
-                  renderSlide(idx, true, true); // Snap instantly
+                  renderSlide(idx, true);
               }
           });
       }
