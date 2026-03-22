@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ThinkRank Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="hero-section" style="cursor: pointer; position: relative; width: 100%; max-width: 1050px; margin: 2rem auto 1rem auto; padding: 2rem; box-sizing: border-box; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.2s; overflow: hidden;" onclick="window.location.href='guide.html'" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+    
+    <div id="slideContent" style="display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; transition: opacity 0.5s ease-in-out; opacity: 1;">
+      
+      <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
+        <img id="slideImg" src="images/diamond9_hero.png" alt="Hero representation" style="width: 100%; max-width: 400px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
+      </div>
+
+      <div style="flex: 1.5; min-width: 350px; text-align: left;">
+        <h1 id="slideTitle" style="margin-top: 0; margin-bottom: 10px; text-align: left; padding: 0; font-size: 2.8rem; color: var(--text);">Diamond 9</h1>
+        <p id="slideDesc" style="font-size: 1.2rem; font-weight: 500; color: #4a5568; margin: 0 0 20px 0; line-height: 1.5;">
+          Deep comparative evaluation for complex decision making.
+        </p>
+        
+        <div class="ratings-container" id="slidersContainer">
+          <div class="rating-row"><div class="rating-label">Speed</div><input type="range" class="tool-slider" id="sliderSpeed" min="0" max="100" value="0"></div>
+          <div class="rating-row"><div class="rating-label">Depth</div><input type="range" class="tool-slider" id="sliderDepth" min="0" max="100" value="0"></div>
+          <div class="rating-row"><div class="rating-label">Discussion</div><input type="range" class="tool-slider" id="sliderDisc" min="0" max="100" value="0"></div>
+          <div class="rating-row"><div class="rating-label">Complexity</div><input type="range" class="tool-slider" id="sliderComp" min="0" max="100" value="0"></div>
+        </div>
+
+        <div class="tags-container" id="slideTags" style="margin-top: 15px;"></div>
+
+        <div style="margin-top: 25px;">
+          <span style="display: inline-block; background-color: #e73c7e; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 6px rgba(231, 60, 126, 0.25);">
+            View Thinking Tools Guide
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <script>
+    const b_carouselData = [
+      { id: 'diamond9', title: 'Diamond 9', desc: 'Deep comparative evaluation for complex decision making.', image: 'images/diamond9_hero.png', speed: 40, depth: 100, discussion: 100, complexity: 80, tags: ['Nuanced', 'Collaborative', 'Justification'] },
+      { id: 'diamond5', title: 'Diamond 5', desc: 'Focused prioritization with lower cognitive load.', image: 'images/diamond5_hero.png', speed: 80, depth: 60, discussion: 80, complexity: 40, tags: ['Lower load', 'Quick comparison'] },
+      { id: 'triangle', title: 'Triangle Ranking', desc: 'Clear, structured hierarchy for balanced evaluation.', image: 'images/triangle_hero.png', speed: 60, depth: 80, discussion: 80, complexity: 60, tags: ['Structured', 'Hierarchical'] },
+      { id: 'line', title: 'Line Ranking', desc: 'Rapid judgement and simple direct ladder format.', image: 'images/line_hero.png', speed: 100, depth: 40, discussion: 40, complexity: 20, tags: ['Fast', 'Simple'] },
+      { id: 'podium', title: 'Podium Ranking', desc: 'Competitive selection focusing on top choices.', image: 'images/podium_hero.png', speed: 100, depth: 60, discussion: 60, complexity: 40, tags: ['Competitive', 'Top-choice'] },
+      { id: 'elimination', title: 'Elimination Mode', desc: 'Argumentative, debate-driven head-to-head evaluation.', image: 'images/elim_hero.png', speed: 80, depth: 80, discussion: 100, complexity: 60, tags: ['Debate-driven', 'Tournament'] }
+    ];
+    let b_currentIndex = 0;
+    let autoCycleInterval;
+    let isUserDragging = false;
+    
+    document.addEventListener("DOMContentLoaded", function() {
+      const b_content = document.getElementById('slideContent');
+      const b_img = document.getElementById('slideImg');
+      const b_title = document.getElementById('slideTitle');
+      const b_desc = document.getElementById('slideDesc');
+      const b_tags = document.getElementById('slideTags');
+      
+      const sliderSpeed = document.getElementById('sliderSpeed');
+      const sliderDepth = document.getElementById('sliderDepth');
+      const sliderDisc = document.getElementById('sliderDisc');
+      const sliderComp = document.getElementById('sliderComp');
+      const sliders = [sliderSpeed, sliderDepth, sliderDisc, sliderComp];
+
+      // Prevent clicks and touch on sliders from navigating to guide.html
+      const slidersContainer = document.getElementById('slidersContainer');
+      slidersContainer.addEventListener('click', e => e.stopPropagation());
+      slidersContainer.addEventListener('mousedown', e => e.stopPropagation());
+      slidersContainer.addEventListener('touchstart', e => e.stopPropagation());
+
+      function updateSliderVisual(slider, val) {
+        slider.style.background = `linear-gradient(90deg, #e73c7e 0%, #ff8a00 ${val}%, #edf2f7 ${val}%, #edf2f7 100%)`;
+      }
+
+      function updateUIElements(data, instant = false) {
+        // Sync Dropdown
+        const layoutSelectElem = document.getElementById('layoutSelect');
+        if (layoutSelectElem && layoutSelectElem.value !== data.id) {
+            layoutSelectElem.value = data.id;
+            if (typeof updateActiveInputs === 'function') updateActiveInputs();
+        }
+
+        if (instant) {
+          b_content.style.transition = 'none';
+          b_content.style.opacity = 1;
+          b_img.src = data.image;
+          b_title.textContent = data.title;
+          b_desc.textContent = data.desc;
+          
+          b_tags.innerHTML = '';
+          data.tags.forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'tag';
+            span.textContent = t;
+            b_tags.appendChild(span);
+          });
+          
+          setTimeout(() => {
+            b_content.style.transition = 'opacity 1s ease-in-out';
+          }, 50);
+        } else {
+          b_content.style.transition = 'opacity 1s ease-in-out';
+          b_content.style.opacity = 0;
+          
+          setTimeout(() => {
+            b_img.src = data.image;
+            b_title.textContent = data.title;
+            b_desc.textContent = data.desc;
+            
+            b_tags.innerHTML = '';
+            data.tags.forEach(t => {
+              const span = document.createElement('span');
+              span.className = 'tag';
+              span.textContent = t;
+              b_tags.appendChild(span);
+            });
+
+            b_content.style.opacity = 1;
+          }, 1000); 
+        }
+      }
+
+      function renderSlide(index, animateSliders = true, instant = false) {
+        const data = b_carouselData[index];
+        b_currentIndex = index;
+        
+        updateUIElements(data, instant);
+
+        if (animateSliders) {
+            setTimeout(() => {
+                if(!isUserDragging) {
+                    sliderSpeed.value = data.speed;
+                    updateSliderVisual(sliderSpeed, data.speed);
+                    sliderDepth.value = data.depth;
+                    updateSliderVisual(sliderDepth, data.depth);
+                    sliderDisc.value = data.discussion;
+                    updateSliderVisual(sliderDisc, data.discussion);
+                    sliderComp.value = data.complexity;
+                    updateSliderVisual(sliderComp, data.complexity);
+                }
+            }, instant ? 10 : 1000);
+        }
+      }
+
+      setTimeout(() => renderSlide(0), 100);
+
+      function stopAutoCycle() {
+          if (autoCycleInterval) {
+              clearInterval(autoCycleInterval);
+              autoCycleInterval = null;
+          }
+      }
+
+      function startAutoCycle() {
+        if(autoCycleInterval) clearInterval(autoCycleInterval);
+        autoCycleInterval = setInterval(() => {
+          if (!isUserDragging) {
+              const nextIndex = (b_currentIndex + 1) % b_carouselData.length;
+              renderSlide(nextIndex);
+          }
+        }, 20000);
+      }
+      startAutoCycle();
+
+      // Stop auto-cycle completely if user touches anything on the page
+      ['mousedown', 'keydown', 'touchstart'].forEach(evt => {
+          document.addEventListener(evt, stopAutoCycle, { once: true, passive: true });
+      });
+
+      // Interactive logic
+      function handleSliderInput(e) {
+          isUserDragging = true; 
+          stopAutoCycle(); // Redundant but safe
+          
+          let slider = e.target;
+          updateSliderVisual(slider, slider.value);
+
+          let sV = parseInt(sliderSpeed.value);
+          let dV = parseInt(sliderDepth.value);
+          let diV = parseInt(sliderDisc.value);
+          let cV = parseInt(sliderComp.value);
+
+          let closestIdx = 0;
+          let minDiff = Infinity;
+
+          b_carouselData.forEach((tool, idx) => {
+              const diff = Math.abs(tool.speed - sV) + Math.abs(tool.depth - dV) + 
+                           Math.abs(tool.discussion - diV) + Math.abs(tool.complexity - cV);
+              if (diff < minDiff) {
+                  minDiff = diff;
+                  closestIdx = idx;
+              }
+          });
+
+          if (closestIdx !== b_currentIndex) {
+              b_currentIndex = closestIdx;
+              updateUIElements(b_carouselData[closestIdx], true);
+          }
+      }
+
+      sliders.forEach(slider => {
+          slider.addEventListener('input', handleSliderInput);
+      });
+
+      document.addEventListener('mouseup', () => isUserDragging = false);
+      document.addEventListener('touchend', () => isUserDragging = false);
+
+      // Let the picker override the hero element
+      const layoutDropdown = document.getElementById('layoutSelect');
+      if (layoutDropdown) {
+          layoutDropdown.addEventListener('change', (e) => {
+              stopAutoCycle();
+              const idx = b_carouselData.findIndex(t => t.id === e.target.value);
+              if (idx !== -1 && idx !== b_currentIndex) {
+                  renderSlide(idx, true, true); // Snap instantly
+              }
+          });
+      }
+    });
+  </script>
+
+  <p id="instructions" class="instructions">Choose a preset or enter your own topic and 9 ideas below. <strong>Every
+      text box is fully editable!</strong><br />When you are ready, click <strong>Generate</strong> to start arranging
+    your layout.</p>
+
+  <div id="inputContainer">
+    <div style="display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap;">
+      <select id="layoutSelect" class="textBox" style="flex: 1; min-width: 150px;" onchange="updateActiveInputs()">
+        <option value="diamond9" selected>Diamond 9</option>
+        <option value="diamond5">Diamond 5</option>
+        <option value="triangle">Triangle Ranked (Top 6)</option>
+        <option value="line">Line (Top 5)</option>
+        <option value="podium">Podium (Top 3)</option>
+        <option value="elimination">Elimination (Vs Mode)</option>
+      </select>
+      <select id="subjectSelect" class="textBox" style="flex: 1; min-width: 150px;" onchange="updateThemeOptions()">
+        <option value="" disabled selected>Select a Subject</option>
+      </select>
+      <select id="themeSelect" class="textBox" style="flex: 1; min-width: 150px;" onchange="loadSelectedTheme()"
+        disabled>
+        <option value="" disabled selected>Select a Theme</option>
+      </select>
+    </div>
+    <input class="textBox" type="text" id="topicInput"
+      placeholder="Optional: Enter a topic (e.g. Most Important Inventions)"
+      style="width: 100%; box-sizing: border-box; margin-bottom: 5px; font-weight: 600; text-align: center;">
+    <div class="inputGrid">
+      <input class="textBox" type="text" id="text1" placeholder="Idea 1">
+      <input class="textBox" type="text" id="text2" placeholder="Idea 2">
+      <input class="textBox" type="text" id="text3" placeholder="Idea 3">
+      <input class="textBox" type="text" id="text4" placeholder="Idea 4">
+      <input class="textBox" type="text" id="text5" placeholder="Idea 5">
+      <input class="textBox" type="text" id="text6" placeholder="Idea 6">
+      <input class="textBox" type="text" id="text7" placeholder="Idea 7">
+      <input class="textBox" type="text" id="text8" placeholder="Idea 8">
+      <input class="textBox" type="text" id="text9" placeholder="Idea 9">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <label style="font-size: 14px; font-weight: 600; color: #4a5568;">Timer:</label>
+        <input type="number" id="timerInput" class="textBox" style="width: 70px; padding: 8px;" placeholder="Mins">
+        <div style="display: flex; gap: 5px;">
+          <button type="button" class="presetBtn"
+            onclick="document.getElementById('timerInput').value=''">Untimed</button>
+          <button type="button" class="presetBtn" onclick="document.getElementById('timerInput').value=3">3</button>
+          <button type="button" class="presetBtn" onclick="document.getElementById('timerInput').value=5">5</button>
+          <button type="button" class="presetBtn" onclick="document.getElementById('timerInput').value=7">7</button>
+          <button type="button" class="presetBtn" onclick="document.getElementById('timerInput').value=10">10</button>
+          <button type="button" class="presetBtn" onclick="document.getElementById('timerInput').value=15">15</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; margin-left: 5px;">
+          <input type="checkbox" id="autoStartToggle"
+            style="cursor: pointer; width: 16px; height: 16px; accent-color: #e73c7e;">
+          <label for="autoStartToggle"
+            style="font-size: 14px; font-weight: 500; color: #4a5568; cursor: pointer; user-select: none;">Auto-start</label>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <input type="checkbox" id="allowEditToggle" checked
+          style="cursor: pointer; width: 16px; height: 16px; accent-color: #e73c7e;">
+        <label for="allowEditToggle"
+          style="font-size: 14px; font-weight: 500; color: #4a5568; cursor: pointer; user-select: none;">Allow "Back to
+          Edit" on shared link</label>
+      </div>
+    </div>
+    <div class="button-group" style="display: flex; gap: 10px; width: 100%; max-width: 600px; margin: 0 auto;">
+      <button class="randomBtn" onclick="loadRandomExample()" style="flex: 1;">Random Example</button>
+      <button class="randomBtn" onclick="showShareModal()" style="flex: 1; background: #4a5568; color: white;">Share Link / QR</button>
+      <button class="makeBtn" onclick="createRectangles()" style="flex: 2;">Generate</button>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+      <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 90%; width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;">
+        <h2 style="margin-top: 0; color: #1a202c; font-size: 1.8rem; margin-bottom: 10px;">Share Activity</h2>
+        <p style="color: #718096; margin-bottom: 25px; line-height: 1.5;">Scan the QR code or copy the link below to instantly share your exact custom configuration.</p>
+        <div style="background: #f7fafc; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
+          <img id="qrImage" src="" alt="QR Code" style="width: 200px; height: 200px; display: block; margin: 0 auto;">
+        </div>
+        <input type="text" id="shareLinkInput" readonly style="width: 100%; box-sizing: border-box; padding: 14px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; color: #2d3748; cursor: copy;" onclick="this.select()">
+        <div style="display: flex; gap: 10px; margin-top: 25px;">
+          <button onclick="copyShareLink(this)" class="presetBtn" style="flex: 1; background: #e73c7e; color: white; padding: 12px; border: none; font-size: 16px;">Copy Link</button>
+          <button onclick="document.getElementById('shareModal').style.display='none'" class="presetBtn" style="flex: 1; background: #e2e8f0; color: #4a5568; padding: 12px; border: none; font-size: 16px;">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="outputHeader"
+    style="display: none; text-align: center; margin-top: 1rem; margin-bottom: 0px; animation: fadeIn 0.6s ease forwards;">
+    <h2 id="generatedTopic" style="margin: 0; margin-bottom: 15px; font-weight: 600;"></h2>
+    <div id="timerDisplay"
+      style="display: none; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto;">
+      <div
+        style="display: flex; font-size: 2.5rem; font-weight: 700; color: #e73c7e; align-items: center; justify-content: center; gap: 15px;">
+        <span id="timerTime" style="font-variant-numeric: tabular-nums;">00:00</span>
+        <button id="timerActionBtn" onclick="toggleTimer()"
+          style="font-size: 1rem; border: 1px solid var(--card-border); background: #ffffff; color: #4a5568; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-weight: bold; transition: background 0.2s;">Start</button>
+      </div>
+      <div
+        style="width: 100%; height: 8px; background: #edf2f7; border-radius: 4px; margin-top: 10px; overflow: hidden;">
+        <div id="timerProgress"
+          style="width: 100%; height: 100%; background: #e73c7e; transition: width 1s linear, background-color 1s linear;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <!-- Items are generated automatically via app.js depending on selected layout mode -->
+  </div>
+
+  <div id="footerActions"
+    style="display: none; text-align: center; margin-bottom: 3rem; animation: fadeIn 0.6s ease forwards;">
+    <button class="randomBtn" onclick="editMode()"
+      style="padding: 10px 24px; font-size: 15px; background: #edf2f7; color: #4a5568; border: 1px solid var(--card-border);">Back
+      to Edit</button>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="js/layouts.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/app.js"></script>
+
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+      referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body>
+
+</html>
