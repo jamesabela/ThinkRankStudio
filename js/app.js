@@ -176,8 +176,8 @@ function editMode() {
   const footerActions = document.getElementById('footerActions');
   if (footerActions) footerActions.style.display = 'none';
 
-  const heroSection = document.querySelector('.hero-section');
-  if (heroSection) heroSection.style.display = 'block';
+  const headerSection = document.getElementById('headerSection');
+  if (headerSection) headerSection.style.display = 'block';
   
   const inputContainer = document.getElementById('inputContainer');
   inputContainer.style.display = 'flex';
@@ -413,8 +413,8 @@ function createRectangles() {
   const instructions = document.getElementById('instructions');
   if (instructions) instructions.style.display = 'none';
   
-  const heroSection = document.querySelector('.hero-section');
-  if (heroSection) heroSection.style.display = 'none';
+  const headerSection = document.getElementById('headerSection');
+  if (headerSection) headerSection.style.display = 'none';
 
   const topicInput = document.getElementById('topicInput');
   const topic = topicInput ? topicInput.value.trim() : '';
