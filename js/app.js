@@ -561,17 +561,70 @@ function showShareModal() {
   const modal = document.getElementById('shareModal');
   const linkInput = document.getElementById('shareLinkInput');
   const qrImage = document.getElementById('qrImage');
+  const copyBtn = document.getElementById('copyShareBtn');
   
   if (modal && linkInput && qrImage) {
     const urlStr = buildConfigUrl();
     linkInput.value = urlStr;
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(urlStr)}`;
+    const encodedUrl = encodeURIComponent(urlStr);
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodedUrl}`;
+    
+    // Social Links
+    const linkedin = document.getElementById('linkedinShare');
+    if (linkedin) linkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+    
+    // Google Classroom
+    const gcContainer = document.getElementById('gc-share-container');
+    if (gcContainer && window.gapi && gapi.sharetoclassroom) {
+        gcContainer.innerHTML = '';
+        gapi.sharetoclassroom.render(gcContainer, { url: urlStr, size: '32' });
+    }
+    
+    // MS Teams
+    const teamsDiv = document.querySelector('.teams-share-button');
+    if (teamsDiv) {
+        teamsDiv.setAttribute('data-href', urlStr);
+        const iframe = teamsDiv.querySelector('iframe');
+        if (iframe) {
+            try {
+                const currentSrc = new URL(iframe.src);
+                currentSrc.searchParams.set('href', urlStr);
+                iframe.src = currentSrc.toString();
+            } catch(e) {}
+        }
+    }
+    
+    if (copyBtn) {
+      if (navigator.share) {
+        copyBtn.textContent = 'Share Link';
+      } else {
+        copyBtn.textContent = 'Copy Link';
+      }
+      copyBtn.style.background = '#e73c7e'; // ensure original color
+    }
+
     modal.style.display = 'flex';
   }
 }
 
 function copyShareLink(btn) {
   const linkInput = document.getElementById('shareLinkInput');
+  const topicInput = document.getElementById('topicInput');
+  const topic = topicInput && topicInput.value.trim() ? topicInput.value.trim() : 'ThinkRank Activity';
+
+  if (navigator.share && linkInput) {
+    navigator.share({
+      title: 'ThinkRank Studio',
+      text: `Join my ${topic} on ThinkRank Studio:`,
+      url: linkInput.value
+    }).then(() => {
+      // Shared successfully
+    }).catch(err => {
+      // Handled if user cancels or fails
+    });
+    return;
+  }
+
   const showCopiedFeedback = () => {
     if (btn) {
       const originalText = btn.textContent;
@@ -596,5 +649,33 @@ function copyShareLink(btn) {
     linkInput.select();
     document.execCommand('copy');
     showCopiedFeedback();
+  }
+}
+
+function downloadQR() {
+  const qrImage = document.getElementById('qrImage');
+  if (qrImage && qrImage.src) {
+    fetch(qrImage.src, { mode: 'cors' })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ThinkRank-QR.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        // Fallback if CORS prevents blob conversion
+        const a = document.createElement('a');
+        a.href = qrImage.src;
+        a.download = 'ThinkRank-QR.png';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
   }
 }
