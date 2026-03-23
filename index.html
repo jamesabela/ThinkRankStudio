@@ -230,10 +230,11 @@
           Edit" on shared link</label>
       </div>
     </div>
-    <div class="button-group" style="display: flex; gap: 10px; width: 100%; max-width: 600px; margin: 0 auto;">
-      <button class="randomBtn" onclick="loadRandomExample()" style="flex: 1;">Random Example</button>
-      <button class="randomBtn" onclick="showShareModal()" style="flex: 1; background: #4a5568; color: white;">Share Link / QR</button>
-      <button class="makeBtn" onclick="createRectangles()" style="flex: 2;">Generate</button>
+    <div class="button-group" style="display: flex; gap: 10px; width: 100%; max-width: 750px; margin: 0 auto; flex-wrap: wrap;">
+      <button class="randomBtn" onclick="window.open('https://chatgpt.com/g/g-69c07b678e4c8191b3af03b4cf89d82d-thinkrank-studio-gpt', '_blank')" style="flex: 1; background: #10a37f; color: white; min-width: 160px;">Get AI to help write</button>
+      <button class="randomBtn" onclick="loadRandomExample()" style="flex: 1; min-width: 140px;">Random Example</button>
+      <button class="randomBtn" onclick="showShareModal()" style="flex: 1; background: #4a5568; color: white; min-width: 140px;">Share Link / QR</button>
+      <button class="makeBtn" onclick="createRectangles()" style="flex: 2; min-width: 250px;">Generate</button>
     </div>
 
     <!-- Share Modal -->
@@ -242,11 +243,27 @@
         <h2 style="margin-top: 0; color: #1a202c; font-size: 1.8rem; margin-bottom: 10px;">Share Activity</h2>
         <p style="color: #718096; margin-bottom: 25px; line-height: 1.5;">Scan the QR code or copy the link below to instantly share your exact custom configuration.</p>
         <div style="background: #f7fafc; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
-          <img id="qrImage" src="" alt="QR Code" style="width: 200px; height: 200px; display: block; margin: 0 auto;">
+          <img id="qrImage" src="" alt="QR Code" style="width: 200px; height: 200px; display: block; margin: 0 auto; border-radius: 8px;">
+          <button onclick="downloadQR()" style="margin-top: 12px; background: none; border: none; color: #4a5568; font-size: 14px; cursor: pointer; text-decoration: underline; font-weight: 600; display: flex; align-items: center; justify-content: center; width: 100%; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download QR
+          </button>
         </div>
-        <input type="text" id="shareLinkInput" readonly style="width: 100%; box-sizing: border-box; padding: 14px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; color: #2d3748; cursor: copy;" onclick="this.select()">
-        <div style="display: flex; gap: 10px; margin-top: 25px;">
-          <button onclick="copyShareLink(this)" class="presetBtn" style="flex: 1; background: #e73c7e; color: white; padding: 12px; border: none; font-size: 16px;">Copy Link</button>
+
+        <div class="share-box" style="margin-bottom: 20px; text-align: left; background: #edf2f7; padding: 15px; border-radius: 12px;">
+          <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; color: #2d3748; font-weight: 600;">Share this activity</h3>
+          <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; min-height: 32px;">
+            <a id="linkedinShare" target="_blank" style="background: #0077b5; color: white; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">LinkedIn</a>
+             <!-- Google Classroom container -->
+             <div id="gc-share-container"></div>
+             <!-- Microsoft Teams -->
+             <div class="teams-share-button" data-href=""></div>
+          </div>
+        </div>
+
+        <input type="text" id="shareLinkInput" readonly style="width: 100%; box-sizing: border-box; padding: 14px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: #ffffff; color: #2d3748; cursor: copy;" onclick="this.select()">
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button id="copyShareBtn" onclick="copyShareLink(this)" class="presetBtn" style="flex: 1; background: #e73c7e; color: white; padding: 12px; border: none; font-size: 16px;">Copy Link</button>
           <button onclick="document.getElementById('shareModal').style.display='none'" class="presetBtn" style="flex: 1; background: #e2e8f0; color: #4a5568; padding: 12px; border: none; font-size: 16px;">Close</button>
         </div>
       </div>
@@ -288,6 +305,8 @@
   <script src="js/layouts.js"></script>
   <script src="js/drag.js"></script>
   <script src="js/app.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script async defer src="https://teams.microsoft.com/share/launcher.js"></script>
 
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
