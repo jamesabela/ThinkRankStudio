@@ -435,3 +435,33 @@
     .tool-slider::-moz-range-thumb:hover {
       transform: scale(1.2);
     }
+
+    .copyright {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #718096;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-weight: 500;
+    }
+
+    .cc-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .cc-icons img {
+      height: 22px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .cc-icons:hover img {
+      opacity: 1;
+    }
