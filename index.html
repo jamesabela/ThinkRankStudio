@@ -11,32 +11,51 @@
 
 <body>
 
-  <div class="hero-section" style="position: relative; width: 100%; max-width: 1050px; margin: 2rem auto 1rem auto; padding: 2rem; box-sizing: border-box; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden;">
-    
-    <div id="slideContent" style="display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; opacity: 1;">
-      
+  <div class="hero-section"
+    style="position: relative; width: 100%; max-width: 1050px; margin: 2rem auto 1rem auto; padding: 2rem; box-sizing: border-box; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden;">
+
+    <div id="slideContent"
+      style="display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; opacity: 1;">
+
       <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
-        <img id="slideImg" src="images/diamond9_hero.png" alt="Hero representation" style="width: 100%; max-width: 400px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
+        <img id="slideImg" src="images/diamond9_hero.png" alt="Hero representation"
+          style="width: 100%; max-width: 400px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
       </div>
 
       <div style="flex: 1.5; min-width: 350px; text-align: left;">
-        <h1 id="slideTitle" style="margin-top: 0; margin-bottom: 10px; text-align: left; padding: 0; font-size: 2.8rem; color: var(--text);">Diamond 9</h1>
-        <p id="slideDesc" style="font-size: 1.2rem; font-weight: 500; color: #4a5568; margin: 0 0 20px 0; line-height: 1.5;">
+        <h1 id="slideTitle"
+          style="margin-top: 0; margin-bottom: 10px; text-align: left; padding: 0; font-size: 2.8rem; color: var(--text);">
+          Diamond 9</h1>
+        <p id="slideDesc"
+          style="font-size: 1.2rem; font-weight: 500; color: #4a5568; margin: 0 0 20px 0; line-height: 1.5;">
           Deep comparative evaluation for complex decision making.
         </p>
-        
+
         <div class="ratings-container" id="slidersContainer">
-          <div class="rating-row"><div class="rating-label">Speed</div><input type="range" class="tool-slider" id="sliderSpeed" min="0" max="100" value="0"></div>
-          <div class="rating-row"><div class="rating-label">Depth</div><input type="range" class="tool-slider" id="sliderDepth" min="0" max="100" value="0"></div>
-          <div class="rating-row"><div class="rating-label">Discussion</div><input type="range" class="tool-slider" id="sliderDisc" min="0" max="100" value="0"></div>
-          <div class="rating-row"><div class="rating-label">Complexity</div><input type="range" class="tool-slider" id="sliderComp" min="0" max="100" value="0"></div>
+          <div class="rating-row">
+            <div class="rating-label">Speed</div><input type="range" class="tool-slider" id="sliderSpeed" min="0"
+              max="100" value="0">
+          </div>
+          <div class="rating-row">
+            <div class="rating-label">Depth</div><input type="range" class="tool-slider" id="sliderDepth" min="0"
+              max="100" value="0">
+          </div>
+          <div class="rating-row">
+            <div class="rating-label">Discussion</div><input type="range" class="tool-slider" id="sliderDisc" min="0"
+              max="100" value="0">
+          </div>
+          <div class="rating-row">
+            <div class="rating-label">Complexity</div><input type="range" class="tool-slider" id="sliderComp" min="0"
+              max="100" value="0">
+          </div>
         </div>
 
         <div class="tags-container" id="slideTags" style="margin-top: 15px;"></div>
 
         <div style="margin-top: 25px;">
           <!-- Make THIS exactly specifically the button -->
-          <button onclick="window.location.href='guide.html'" class="presetBtn" style="background-color: #e73c7e; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(231, 60, 126, 0.25);">
+          <button onclick="window.location.href='guide.html'" class="presetBtn"
+            style="background-color: #e73c7e; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(231, 60, 126, 0.25);">
             View Thinking Tools Guide
           </button>
         </div>
@@ -44,7 +63,7 @@
 
     </div>
   </div>
-  
+
   <script>
     const b_carouselData = [
       { id: 'diamond9', title: 'Diamond 9', desc: 'Deep comparative evaluation for complex decision making.', image: 'images/diamond9_hero.png', speed: 40, depth: 100, discussion: 100, complexity: 80, tags: ['Nuanced', 'Collaborative', 'Justification'] },
@@ -56,14 +75,14 @@
     ];
     let b_currentIndex = 0;
     let isUserDragging = false;
-    
-    document.addEventListener("DOMContentLoaded", function() {
+
+    document.addEventListener("DOMContentLoaded", function () {
       const b_content = document.getElementById('slideContent');
       const b_img = document.getElementById('slideImg');
       const b_title = document.getElementById('slideTitle');
       const b_desc = document.getElementById('slideDesc');
       const b_tags = document.getElementById('slideTags');
-      
+
       const sliderSpeed = document.getElementById('sliderSpeed');
       const sliderDepth = document.getElementById('sliderDepth');
       const sliderDisc = document.getElementById('sliderDisc');
@@ -77,14 +96,14 @@
       function updateUIElements(data) {
         const layoutSelectElem = document.getElementById('layoutSelect');
         if (layoutSelectElem && layoutSelectElem.value !== data.id) {
-            layoutSelectElem.value = data.id;
-            if (typeof updateActiveInputs === 'function') updateActiveInputs();
+          layoutSelectElem.value = data.id;
+          if (typeof updateActiveInputs === 'function') updateActiveInputs();
         }
 
         b_img.src = data.image;
         b_title.textContent = data.title;
         b_desc.textContent = data.desc;
-        
+
         b_tags.innerHTML = '';
         data.tags.forEach(t => {
           const span = document.createElement('span');
@@ -97,20 +116,20 @@
       function renderSlide(index, animateSliders = true) {
         const data = b_carouselData[index];
         b_currentIndex = index;
-        
+
         updateUIElements(data);
 
         if (animateSliders) {
-            if(!isUserDragging) {
-                sliderSpeed.value = data.speed;
-                updateSliderVisual(sliderSpeed, data.speed);
-                sliderDepth.value = data.depth;
-                updateSliderVisual(sliderDepth, data.depth);
-                sliderDisc.value = data.discussion;
-                updateSliderVisual(sliderDisc, data.discussion);
-                sliderComp.value = data.complexity;
-                updateSliderVisual(sliderComp, data.complexity);
-            }
+          if (!isUserDragging) {
+            sliderSpeed.value = data.speed;
+            updateSliderVisual(sliderSpeed, data.speed);
+            sliderDepth.value = data.depth;
+            updateSliderVisual(sliderDepth, data.depth);
+            sliderDisc.value = data.discussion;
+            updateSliderVisual(sliderDisc, data.discussion);
+            sliderComp.value = data.complexity;
+            updateSliderVisual(sliderComp, data.complexity);
+          }
         }
       }
 
@@ -119,36 +138,36 @@
 
       // Interactive logic
       function handleSliderInput(e) {
-          isUserDragging = true; 
-          
-          let slider = e.target;
-          updateSliderVisual(slider, slider.value);
+        isUserDragging = true;
 
-          let sV = parseInt(sliderSpeed.value);
-          let dV = parseInt(sliderDepth.value);
-          let diV = parseInt(sliderDisc.value);
-          let cV = parseInt(sliderComp.value);
+        let slider = e.target;
+        updateSliderVisual(slider, slider.value);
 
-          let closestIdx = 0;
-          let minDiff = Infinity;
+        let sV = parseInt(sliderSpeed.value);
+        let dV = parseInt(sliderDepth.value);
+        let diV = parseInt(sliderDisc.value);
+        let cV = parseInt(sliderComp.value);
 
-          b_carouselData.forEach((tool, idx) => {
-              const diff = Math.abs(tool.speed - sV) + Math.abs(tool.depth - dV) + 
-                           Math.abs(tool.discussion - diV) + Math.abs(tool.complexity - cV);
-              if (diff < minDiff) {
-                  minDiff = diff;
-                  closestIdx = idx;
-              }
-          });
+        let closestIdx = 0;
+        let minDiff = Infinity;
 
-          if (closestIdx !== b_currentIndex) {
-              b_currentIndex = closestIdx;
-              updateUIElements(b_carouselData[closestIdx]);
+        b_carouselData.forEach((tool, idx) => {
+          const diff = Math.abs(tool.speed - sV) + Math.abs(tool.depth - dV) +
+            Math.abs(tool.discussion - diV) + Math.abs(tool.complexity - cV);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = idx;
           }
+        });
+
+        if (closestIdx !== b_currentIndex) {
+          b_currentIndex = closestIdx;
+          updateUIElements(b_carouselData[closestIdx]);
+        }
       }
 
       sliders.forEach(slider => {
-          slider.addEventListener('input', handleSliderInput);
+        slider.addEventListener('input', handleSliderInput);
       });
 
       document.addEventListener('mouseup', () => isUserDragging = false);
@@ -156,12 +175,12 @@
 
       const layoutDropdown = document.getElementById('layoutSelect');
       if (layoutDropdown) {
-          layoutDropdown.addEventListener('change', (e) => {
-              const idx = b_carouselData.findIndex(t => t.id === e.target.value);
-              if (idx !== -1 && idx !== b_currentIndex) {
-                  renderSlide(idx, true);
-              }
-          });
+        layoutDropdown.addEventListener('change', (e) => {
+          const idx = b_carouselData.findIndex(t => t.id === e.target.value);
+          if (idx !== -1 && idx !== b_currentIndex) {
+            renderSlide(idx, true);
+          }
+        });
       }
     });
   </script>
@@ -230,41 +249,64 @@
           Edit" on shared link</label>
       </div>
     </div>
-    <div class="button-group" style="display: flex; gap: 10px; width: 100%; max-width: 750px; margin: 0 auto; flex-wrap: wrap;">
-      <button class="randomBtn" onclick="window.open('https://chatgpt.com/g/g-69c07b678e4c8191b3af03b4cf89d82d-thinkrank-studio-gpt', '_blank')" style="flex: 1; background: #10a37f; color: white; min-width: 160px;">Get AI to help write</button>
+    <div class="button-group"
+      style="display: flex; gap: 10px; width: 100%; max-width: 750px; margin: 0 auto; flex-wrap: wrap;">
+      <button class="randomBtn"
+        onclick="window.open('https://chatgpt.com/g/g-69c07b678e4c8191b3af03b4cf89d82d-thinkrank-studio-gpt', '_blank')"
+        style="flex: 1; background: #10a37f; color: white; min-width: 160px;">Get AI to help write</button>
       <button class="randomBtn" onclick="loadRandomExample()" style="flex: 1; min-width: 140px;">Random Example</button>
-      <button class="randomBtn" onclick="showShareModal()" style="flex: 1; background: #4a5568; color: white; min-width: 140px;">Share Link / QR</button>
+      <button class="randomBtn" onclick="showShareModal()"
+        style="flex: 1; background: #4a5568; color: white; min-width: 140px;">Share Link / QR</button>
       <button class="makeBtn" onclick="createRectangles()" style="flex: 2; min-width: 250px;">Generate</button>
     </div>
 
     <!-- Share Modal -->
-    <div id="shareModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-      <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 90%; width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;">
+    <div id="shareModal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+      <div
+        style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 90%; width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;">
         <h2 style="margin-top: 0; color: #1a202c; font-size: 1.8rem; margin-bottom: 10px;">Share Activity</h2>
-        <p style="color: #718096; margin-bottom: 25px; line-height: 1.5;">Scan the QR code or copy the link below to instantly share your exact custom configuration.</p>
-        <div style="background: #f7fafc; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
-          <img id="qrImage" src="" alt="QR Code" style="width: 200px; height: 200px; display: block; margin: 0 auto; border-radius: 8px;">
-          <button onclick="downloadQR()" style="margin-top: 12px; background: none; border: none; color: #4a5568; font-size: 14px; cursor: pointer; text-decoration: underline; font-weight: 600; display: flex; align-items: center; justify-content: center; width: 100%; gap: 6px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <p style="color: #718096; margin-bottom: 25px; line-height: 1.5;">Scan the QR code or copy the link below to
+          instantly share your exact custom configuration.</p>
+        <div
+          style="background: #f7fafc; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
+          <img id="qrImage" src="" alt="QR Code"
+            style="width: 200px; height: 200px; display: block; margin: 0 auto; border-radius: 8px;">
+          <button onclick="downloadQR()"
+            style="margin-top: 12px; background: none; border: none; color: #4a5568; font-size: 14px; cursor: pointer; text-decoration: underline; font-weight: 600; display: flex; align-items: center; justify-content: center; width: 100%; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
             Download QR
           </button>
         </div>
 
-        <div class="share-box" style="margin-bottom: 20px; text-align: left; background: #edf2f7; padding: 15px; border-radius: 12px;">
-          <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; color: #2d3748; font-weight: 600;">Share this activity</h3>
+        <div class="share-box"
+          style="margin-bottom: 20px; text-align: left; background: #edf2f7; padding: 15px; border-radius: 12px;">
+          <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; color: #2d3748; font-weight: 600;">Share
+            this activity</h3>
           <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; min-height: 32px;">
-            <a id="linkedinShare" target="_blank" style="background: #0077b5; color: white; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">LinkedIn</a>
-             <!-- Google Classroom container -->
-             <div id="gc-share-container"></div>
-             <!-- Microsoft Teams -->
-             <div class="teams-share-button" data-href=""></div>
+            <a id="linkedinShare" target="_blank"
+              style="background: #0077b5; color: white; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">LinkedIn</a>
+            <!-- Google Classroom container -->
+            <div id="gc-share-container"></div>
+            <!-- Microsoft Teams -->
+            <div class="teams-share-button" data-href=""></div>
           </div>
         </div>
 
-        <input type="text" id="shareLinkInput" readonly style="width: 100%; box-sizing: border-box; padding: 14px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: #ffffff; color: #2d3748; cursor: copy;" onclick="this.select()">
+        <input type="text" id="shareLinkInput" readonly
+          style="width: 100%; box-sizing: border-box; padding: 14px; font-size: 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: #ffffff; color: #2d3748; cursor: copy;"
+          onclick="this.select()">
         <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <button id="copyShareBtn" onclick="copyShareLink(this)" class="presetBtn" style="flex: 1; background: #e73c7e; color: white; padding: 12px; border: none; font-size: 16px;">Copy Link</button>
-          <button onclick="document.getElementById('shareModal').style.display='none'" class="presetBtn" style="flex: 1; background: #e2e8f0; color: #4a5568; padding: 12px; border: none; font-size: 16px;">Close</button>
+          <button id="copyShareBtn" onclick="copyShareLink(this)" class="presetBtn"
+            style="flex: 1; background: #e73c7e; color: white; padding: 12px; border: none; font-size: 16px;">Copy
+            Link</button>
+          <button onclick="document.getElementById('shareModal').style.display='none'" class="presetBtn"
+            style="flex: 1; background: #e2e8f0; color: #4a5568; padding: 12px; border: none; font-size: 16px;">Close</button>
         </div>
       </div>
     </div>
@@ -302,23 +344,25 @@
   </div>
 
   <div class="copyright" style="flex-direction: column; gap: 12px; margin-top: 1.5rem; margin-bottom: 2.5rem;">
-      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; text-align: center; line-height: 1.5;">
-          <span>
-              Made with ❤️ for better thinking. If it helped you, you can support the project with a tea.
-              <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener" style="color: #e73c7e; text-decoration: none; font-weight: 600;">Buy me a tea</a>.
-          </span>
-          <span style="display: inline-block; padding: 0 5px;">•</span>
-          <span>Also see my <a href="https://jamesabela.github.io/mindmap/" target="_blank" rel="noopener" style="color: #e73c7e; text-decoration: none; font-weight: 600;">Mindmap tool</a></span>
-      </div>
-      <div style="display: flex; justify-content: center;">
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"
-              rel="license noopener noreferrer" class="cc-icons">
-              <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="CC">
-              <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="BY">
-              <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="NC">
-              <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="SA">
-          </a>
-      </div>
+    <div
+      style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; text-align: center; line-height: 1.5;">
+      <span>
+        Made with ❤️ for better thinking. If it helped you, you can support the project with a tea.
+        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener"
+          style="color: #e73c7e; text-decoration: none; font-weight: 600;">Buy me a tea</a>.
+      </span>
+      <span><a href="https://jamesabela.github.io/jsfun/index.html" target="_blank" rel="noopener"
+          style="color: #e73c7e; text-decoration: none; font-weight: 600;">More Teaching Tools</a></span>
+    </div>
+    <div style="display: flex; justify-content: center;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener noreferrer"
+        class="cc-icons">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="CC">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="BY">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="NC">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="SA">
+      </a>
+    </div>
   </div>
 
   <script src="data.js"></script>
