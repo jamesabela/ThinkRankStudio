@@ -82,5 +82,18 @@ const presetData = {
     { topic: "Skills to Learn in 2026", words: ["AI Tools", "Coding Basics", "Public Speaking", "Writing", "Data Analysis", "Design", "Investing", "Negotiation", "Languages"] },
     { topic: "Ways to De-stress", words: ["Nature Walk", "Music", "Reading", "Exercise", "Baking", "Socializing", "Bath", "Stretching", "Creative Hobby"] },
     { topic: "Values to Live By", words: ["Integrity", "Compassion", "Courage", "Curiosity", "Respect", "Gratitude", "Discipline", "Loyalty", "Humility"] }
+  ],
+  "Economics": [
+    { topic: "Market Failure Causes", words: ["Monopolies", "Negative Externalities", "Public Goods", "Asymmetric Information", "Merit Goods", "Demerit Goods", "Factor Immobility", "Inequality", "Positive Externalities"] },
+    { topic: "Macroeconomic Objectives", words: ["Low Inflation", "Economic Growth", "Full Employment", "Balance of Payments", "Income Equality", "Environmental Care", "Budget Balance", "Exchange Rate", "Productivity"] },
+    { topic: "Policies for Market Failure", words: ["Indirect Taxes", "Subsidies", "Maximum Prices", "Minimum Prices", "State Provision", "Regulation", "Tradeable Permits", "Information Policy", "Property Rights"] },
+    { topic: "Monetary Policy Channels", words: ["Interest Rates", "Quantitative Easing", "Exchange Rates", "Asset Prices", "Credit Availability", "Wealth Effect", "Confidence", "Consumer Spending", "Forward Guidance"] },
+    { topic: "Fiscal Policy Tools & Effects", words: ["Income Tax", "Corporation Tax", "VAT", "Infrastructure Spend", "Welfare Payments", "Budget Deficit", "National Debt", "Crowding Out", "Multiplier Effect"] },
+    { topic: "Supply-Side Policies", words: ["Deregulation", "Privatisation", "Income Tax Cuts", "Education & Training", "Infrastructure Investment", "Welfare Reforms", "Subsidising R&D", "Trade Union Reform", "Competition Policy"] },
+    { topic: "Aggregate Demand Components", words: ["Consumer Spending", "Business Investment", "Government Spending", "Export Value", "Import Value", "Interest Rates", "Consumer Confidence", "Income Tax Rates", "Exchange Rates"] },
+    { topic: "Aggregate Supply Determinants", words: ["Raw Material Costs", "Wages & Salaries", "Business Taxation", "Labour Productivity", "Technology Levels", "Exchange Rates", "Regulations", "Education & Skills", "Infrastructure Quality"] },
+    { topic: "Exchange Rate Drivers", words: ["Interest Rates", "Inflation Rates", "Balance of Payments", "Speculation", "Economic Growth", "FDI Flows", "Government Debt", "Quantitative Easing", "Political Stability"] },
+    { topic: "Protectionist Trade Barriers", words: ["Tariffs", "Import Quotas", "Export Subsidies", "Embargoes", "Red Tape", "Currency Manipulation", "Domestic Subsidies", "Green Standards", "Safety Regulations"] }
   ]
 };
+
